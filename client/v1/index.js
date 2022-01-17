@@ -64,7 +64,10 @@ console.log(number_product);
 // 1. Create a variable and assign it the list of brands name only
 // 2. Log the variable
 // 3. Log how many brands we have
-
+var list_brand = marketplace.map(a => a.brand);	
+var number_brand = new Set(list_brand);
+console.log(number_brand);
+console.log(number_brand.length)		
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
