@@ -67,29 +67,36 @@ console.log(number_product);
 var list_brand = marketplace.map(a => a.brand);	
 var number_brand = new Set(list_brand);
 console.log(number_brand);
-console.log(number_brand.length)		
+console.log(number_brand.size)		
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
-
+var sort_marketplace_price = marketplace.sort((a,b)=> a.price - b.price)
+console.log(sort_marketplace_price)
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
-
+var sort_marketplace_date = marketplace.sort(function(a,b){
+	if (a.date<b.date) {
+		return -1;
+	} else {
+		return 1;
+}});
+console.log(sort_marketplace_date)
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
-
+var filter_marketplace_50100 = marketplace.filter(a => a.price>=50 && a.price<100)
+console.log(filter_marketplace_50100)
 
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
-
 
 
 
