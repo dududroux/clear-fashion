@@ -32,9 +32,18 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // I can find on these e-shops
 // 2. Log the variable
 
+const cheap_tee = [{ 
+		'name' : 'Hoopal',
+		'url' : 'https://hopaal.com/collections/t-shirts-homme/products/classique-forest-t-shirt-homme?variant=19733822111830'
+}, {
+		'name' : 'Loom',
+		'url' : 'https://www.loom.fr/products/le-t-shirt'
+}, { 
+		'name' : 'ADRESSE',
+		'url' : 'https://adresse.paris/t-shirts-et-polos/4238-t-shirt-ranelagh-1300000262026.html'				
+}];
 
-
-
+console.table(cheap_tee);
 
 /**
  * 👕
@@ -48,7 +57,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
-
+const number_product = marketplace.length
+console.log(number_product);
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
