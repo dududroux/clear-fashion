@@ -86,19 +86,19 @@ var sort_marketplace_date = marketplace.sort(function(a,b){
 	} else {
 		return 1;
 }});
-console.log(sort_marketplace_date)
+console.log(sort_marketplace_date);
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
-var filter_marketplace_50100 = marketplace.filter(a => a.price>=50 && a.price<100)
-console.log(filter_marketplace_50100)
+var filter_marketplace_50100 = marketplace.filter(a => a.price>=50 && a.price<100);
+console.log(filter_marketplace_50100);
 
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
-
-
+const average = marketplace.reduce((total, next) => total + next.price, 0)/ marketplace.length;
+console.log(average);
 
 
 /**
