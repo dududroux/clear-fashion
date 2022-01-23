@@ -169,7 +169,7 @@ console.log(sortbrand_date);
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
-
+var p90_brand = new Object();
 
 
 
@@ -245,21 +245,43 @@ const COTELE_PARIS = [
 // 🎯 TODO: New released products
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
+const date = new Date('2021-01-16');
+function isNew(product){
+	const release = new Date(product.released);
+	var diff = Math.abs((date - release)/(7*24*60*60*1000));
+	//console.log(diff);
+	if (diff < 2) {
+		console.log("True");
+	}
+	else
+	{
+		console.log("False");
+	};
+}
+isNew(COTELE_PARIS[0]);
 
 
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
-
+var reasonable_price = "True";
+COTELE_PARIS.forEach(function(a) { if (a.price>100) {reasonable_price = "False"; };})
+console.log(reasonable_price);
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
+var product = new Object();
 
+COTELE_PARIS.forEach(function(a) { if (a.uuid == `b56c6d88-749a-5b4c-b571-e5b5c6483131`) {product = a;}});
+console.log(product.name);
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
+const COTELE_PARIS_V2 = COTELE_PARIS.filter(a => a.uuid != `b56c6d88-749a-5b4c-b571-e5b5c6483131`);
 // 2. Log the new list of product
+console.log(COTELE_PARIS_V2);
+
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
@@ -275,7 +297,12 @@ let jacket = blueJacket;
 jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
+console.log(blueJacket);
+console.log(jacket);
+
 // 2. What do you notice?
+
+//Same thing
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -285,7 +312,11 @@ blueJacket = {
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
 
+jacket = {...blueJacket};
+jacket.favorite = true;
 
+console.log(blueJacket);
+console.log(jacket);
 
 
 
@@ -297,4 +328,6 @@ blueJacket = {
 
 // 🎯 TODO: Save in localStorage
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
+localStorage.setItem('fav_brand', JSON.stringify(MY_FAVORITE_BRANDS));
 // 2. log the localStorage
+console.log(localStorage);
