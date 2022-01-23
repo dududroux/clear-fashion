@@ -108,9 +108,9 @@ console.log(average);
  * 🏎
  */
 
-// 🎯 TODO: Products by brands
-// 1. Create an object called `brands` to manipulate products by brand name
+// 🎯 TODO: Products by brandsanipulate products by brand name
 // The key is the brand name
+// 1. Create an object called `brands` to m
 // The value is the array of products
 //
 // Example:
@@ -121,18 +121,39 @@ console.log(average);
 //   'brand-name-n': [{...}, {...}, ..., {...}],
 // };
 //
-// 2. Log the variable
-// 3. Log the number of products by brands
+var groupbyBrand = marketplace.reduce(function(groups, item) {
+	const val = item["brand"]
+	groups[val] = groups[val] || []
+	groups[val].push(item)
+	return groups
+}, {});
 
+// 2. Log the variable
+console.log(groupbyBrand);
+// 3. Log the number of products by brands
+const val = Object.values(groupbyBrand);
+var nb_per_brand = new Object();
+val.forEach(a => nb_per_brand[a[0].brand] = a.length);
+console.log(nb_per_brand);
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
+var sortbrand = new Object(); 
+val.forEach(a => sortbrand[a[0].brand] = (a.sort((b,c) => b.price - c.price)))
 // 2. Log the sort
-
+console.log(sortbrand);
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
+var sortbrand_date = new Object(); 
+val.forEach(a => sortbrand_date[a[0].brand] = (a.sort(function(a,b){
+	if (a.date<b.date) {
+		return -1;
+	} else {
+		return 1;
+}})));
 // 2. Log the sort
+console.log(sortbrand_date);
 
 
 
