@@ -11,6 +11,7 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
+
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -81,7 +82,6 @@ const renderPagination = pagination => {
     {'length': pageCount},
     (value, index) => `<option value="${index + 1}">${index + 1}</option>`
   ).join('');
-
   selectPage.innerHTML = options;
   selectPage.selectedIndex = currentPage - 1;
 };
@@ -111,10 +111,19 @@ const render = (products, pagination) => {
  * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
-  fetchProducts(currentPagination.currentPage, parseInt(event.target.value))
+  currentPagination.currentProducts = parseInt(event.target.value);
+  fetchProducts(currentPagination.currentPage, currentPagination.currentProducts)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
+
+selectPage.addEventListener('change', event => {
+  currentPagination.currentPage = parseInt(event.target.value);
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
+
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
