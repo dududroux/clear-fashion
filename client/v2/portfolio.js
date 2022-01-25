@@ -4,6 +4,7 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
+let filter = "noFilter";
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
@@ -34,19 +35,39 @@ const fetchProducts = async (page = 1, size = 12) => {
       `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
     );
     const body = await response.json();
+    var groupbyBrand = body.data.result.reduce(function(groups, item) {
+      const val = item["brand"]
+      groups[val] = groups[val] || []
+      groups[val].push(item)
+      return groups
+    }, {});
+    
+    var selectBox = document.getElementById('brand-select');
+    selectBox.options.length=0;
+    selectBox.options.add( new Option("-", "noFilter", false));
+    for (var i =0, l = Object.keys(groupbyBrand).length; i< l; i++){
+      var option = Object.keys(groupbyBrand)[i];
+      selectBox.options.add( new Option(option, option, false));
+    }
+    selectBox.options.add(new Option("No filter", "noFilter", false));
+    if (filter!="noFilter"){
+      body.data.result = groupbyBrand[filter]
+    }
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-
     return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
+  
 };
 
+const selectBrand = document.querySelector('#brand-select');
+//console.log(selectBrand);
 /**
  * Render list of products
  * @param  {Array} products
@@ -111,8 +132,8 @@ const render = (products, pagination) => {
  * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
-  currentPagination.currentProducts = parseInt(event.target.value);
-  fetchProducts(currentPagination.currentPage, currentPagination.currentProducts)
+  currentPagination.pageSize = parseInt(event.target.value);
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
@@ -124,9 +145,16 @@ selectPage.addEventListener('change', event => {
   .then(() => render(currentProducts, currentPagination));
 });
 
+selectBrand.addEventListener('change', event => {
+  filter = event.target.value;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
+
