@@ -14,9 +14,16 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts')
+const spanP50 = document.querySelector('#p50');
+const spanP90 = document.querySelector('#p90');
+const spanP95 = document.querySelector('#p95');
 const selectFilterRecent = document.querySelector('#recent-select');
 const selectFilterReasonable = document.querySelector('#reasonable-select');
 const selectSort = document.querySelector('#sort-select');
+
+
+
 
 const date = new Date();
 function isNew(product){
@@ -31,7 +38,6 @@ function isNew(product){
 		return "False";
 	};
 }
-
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -159,16 +165,28 @@ const renderPagination = pagination => {
  * Render page selector
  * @param  {Object} pagination
  */
-const renderIndicators = pagination => {
-  const {count} = pagination;
+function percentile(nb,products){
 
-  spanNbProducts.innerHTML = count;
+    let pos = Math.round(products.length * (1-(nb/100)));
+    let cop = JSON.parse(JSON.stringify(products)).sort((a, b) => a.price-b.price);
+    return cop[pos-1].price;
+    
+};
+
+
+const renderIndicators = (pagination, products) => {
+  spanNbNewProducts.innerHTML = products.filter(a => isNew(a) == "True").length;
+  spanNbProducts.innerHTML = products.length;
+  console.log(percentile(95, products));
+  spanP50.innerHTML = percentile(50, products);
+  spanP90.innerHTML = percentile(90, products);
+  spanP95.innerHTML = percentile(95, products);
 };
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
-  renderIndicators(pagination);
+  renderIndicators(pagination, products);
 };
 
 /**
