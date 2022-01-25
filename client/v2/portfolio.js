@@ -9,7 +9,7 @@ let filterRecent = "no";
 let filterReasonable = "no";
 let sortFilter = "notSorted"; 
 
-// inititiqte selectors
+// instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
@@ -177,7 +177,6 @@ const render = (products, pagination) => {
 
 /**
  * Select the number of products to display
- * @type {[type]}
  */
 selectShow.addEventListener('change', event => {
   currentPagination.pageSize = parseInt(event.target.value);
