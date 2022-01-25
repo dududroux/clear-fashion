@@ -4,14 +4,31 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
-let filter = "noFilter";
+let filterBrand = "noFilter";
+let filterRecent = "no";
+let filterReasonable = "no"; 
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const selectFilterRecent = document.querySelector('#recent-select');
+const selectFilterReasonable = document.querySelector('#reasonable-select');
 
+const date = new Date();
+function isNew(product){
+	const release = new Date(product.released);
+	var diff = Math.abs((date - release)/(7*24*60*60*1000));
+	//console.log(diff);
+	if (diff < 2) {
+		return "True";
+	}
+	else
+	{
+		return "False";
+	};
+}
 
 /**
  * Set global value
@@ -41,7 +58,6 @@ const fetchProducts = async (page = 1, size = 12) => {
       groups[val].push(item)
       return groups
     }, {});
-    
     var selectBox = document.getElementById('brand-select');
     selectBox.options.length=0;
     selectBox.options.add( new Option("-", "noFilter", false));
@@ -50,14 +66,21 @@ const fetchProducts = async (page = 1, size = 12) => {
       selectBox.options.add( new Option(option, option, false));
     }
     selectBox.options.add(new Option("No filter", "noFilter", false));
-    if (filter!="noFilter"){
-      body.data.result = groupbyBrand[filter]
+    if (filterBrand!="noFilter"){
+      body.data.result = groupbyBrand[filterBrand]
+    }
+    if (filterReasonable == "yes"){
+      body.data.result = body.data.result.filter(a => a.price<50)
+    }
+    if (filterRecent == "yes"){
+      body.data.result = body.data.result.filter(a => isNew(a) == "True");
     }
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
     }
+    console.log(body.data.result);
     return body.data;
   } catch (error) {
     console.error(error);
@@ -146,7 +169,21 @@ selectPage.addEventListener('change', event => {
 });
 
 selectBrand.addEventListener('change', event => {
-  filter = event.target.value;
+  filterBrand = event.target.value;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
+
+selectFilterReasonable.addEventListener('change', event => {
+  filterReasonable = event.target.value;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
+
+selectFilterRecent.addEventListener('change', event => {
+  filterRecent = event.target.value;
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
   .then(() => render(currentProducts, currentPagination));
