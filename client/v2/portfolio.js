@@ -6,7 +6,8 @@ let currentProducts = [];
 let currentPagination = {};
 let filterBrand = "noFilter";
 let filterRecent = "no";
-let filterReasonable = "no"; 
+let filterReasonable = "no";
+let sortFilter = "notSorted"; 
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
@@ -15,6 +16,7 @@ const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const selectFilterRecent = document.querySelector('#recent-select');
 const selectFilterReasonable = document.querySelector('#reasonable-select');
+const selectSort = document.querySelector('#sort-select');
 
 const date = new Date();
 function isNew(product){
@@ -80,7 +82,30 @@ const fetchProducts = async (page = 1, size = 12) => {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-    console.log(body.data.result);
+    switch(sortFilter){
+      case 'price-asc':
+        body.data.result = body.data.result.sort((a,b)=> a.price - b.price);
+        break;
+      case 'price-desc':
+        body.data.result = body.data.result.sort((a,b)=> b.price - a.price);
+        break;
+      case 'date-asc':
+        body.data.result = body.data.result.sort(function(a,b){
+          if (a.released<b.released) {
+            return -1;
+          } else {
+            return 1;
+        };});
+        break;
+      case 'date-desc':
+        body.data.result = body.data.result.sort(function(a,b){
+          if (a.released>b.released) {
+            return -1;
+          } else {
+            return 1;
+        };});
+        break;    
+    }
     return body.data;
   } catch (error) {
     console.error(error);
@@ -184,6 +209,13 @@ selectFilterReasonable.addEventListener('change', event => {
 
 selectFilterRecent.addEventListener('change', event => {
   filterRecent = event.target.value;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
+
+selectSort.addEventListener('change', event => {
+  sortFilter = event.target.value;
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
   .then(() => render(currentProducts, currentPagination));
