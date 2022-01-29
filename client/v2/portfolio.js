@@ -18,6 +18,7 @@ const spanNbNewProducts = document.querySelector('#nbNewProducts')
 const spanP50 = document.querySelector('#p50');
 const spanP90 = document.querySelector('#p90');
 const spanP95 = document.querySelector('#p95');
+const spanLastRelease = document.querySelector('#last_release');
 const selectFilterRecent = document.querySelector('#recent-select');
 const selectFilterReasonable = document.querySelector('#reasonable-select');
 const selectSort = document.querySelector('#sort-select');
@@ -129,12 +130,13 @@ const selectBrand = document.querySelector('#brand-select');
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
+
   const template = products
     .map(product => {
       return `
       <div class="product" id=${product.uuid}>
         <span>${product.brand}</span>
-        <a href="${product.link}">${product.name}</a>
+        <a target="_blank" href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
       </div>
     `;
@@ -173,14 +175,25 @@ function percentile(nb,products){
     
 };
 
+function sortDate(products){
+  var sort = JSON.parse(JSON.stringify(products)).sort(function(a,b){
+    if (a.released<b.released) {
+      return -1;
+    } else {
+      return 1;
+  };});
+  return sort;
+}
 
 const renderIndicators = (pagination, products) => {
   spanNbNewProducts.innerHTML = products.filter(a => isNew(a) == "True").length;
   spanNbProducts.innerHTML = products.length;
-  console.log(percentile(95, products));
   spanP50.innerHTML = percentile(50, products);
   spanP90.innerHTML = percentile(90, products);
   spanP95.innerHTML = percentile(95, products);
+  let t = sortDate(products);
+  spanLastRelease.innerHTML = t[t.length-1].released;
+
 };
 
 const render = (products, pagination) => {
