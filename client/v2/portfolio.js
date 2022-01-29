@@ -8,6 +8,8 @@ let filterBrand = "noFilter";
 let filterRecent = "no";
 let filterReasonable = "no";
 let sortFilter = "notSorted"; 
+let setFavorite = new Set();
+let filterFavorite = "no";
 
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
@@ -21,8 +23,8 @@ const spanP95 = document.querySelector('#p95');
 const spanLastRelease = document.querySelector('#last_release');
 const selectFilterRecent = document.querySelector('#recent-select');
 const selectFilterReasonable = document.querySelector('#reasonable-select');
+const selectFilterFavorite = document.querySelector("#favorite-select");
 const selectSort = document.querySelector('#sort-select');
-
 
 
 
@@ -84,7 +86,9 @@ const fetchProducts = async (page = 1, size = 12) => {
     if (filterRecent == "yes"){
       body.data.result = body.data.result.filter(a => isNew(a) == "True");
     }
-
+    if (filterFavorite == "yes"){
+      body.data.result = body.data.result.filter(a => setFavorite.has(a.uuid) == true);
+    }
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
@@ -130,7 +134,6 @@ const selectBrand = document.querySelector('#brand-select');
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
-
   const template = products
     .map(product => {
       return `
@@ -138,6 +141,7 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a target="_blank" href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
+        <input type="checkbox" id=${product.uuid} value ="Favorite">
       </div>
     `;
     })
@@ -168,9 +172,9 @@ const renderPagination = pagination => {
  * @param  {Object} pagination
  */
 function percentile(nb,products){
-
     let pos = Math.round(products.length * (1-(nb/100)));
     let cop = JSON.parse(JSON.stringify(products)).sort((a, b) => a.price-b.price);
+    if (pos-1 < 0){ pos = 1;};
     return cop[pos-1].price;
     
 };
@@ -200,8 +204,29 @@ const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination, products);
+  const checkboxes = document.querySelectorAll("input[value=Favorite]");
+  checkboxes.forEach(function(checkbox){
+    checkbox.addEventListener('change' ,function() {
+      let x = Array.from(checkboxes)
+      .filter(i => i.checked)
+      .map(i => i.id);
+
+      x.forEach(function(t){
+        setFavorite.add(t);
+        });
+      if (checkbox.checked == false)
+      {
+        setFavorite.delete(checkbox.id);
+      };
+    })
+  });
 };
 
+
+
+
+
+//console.log(checkboxes);
 /**
  * Declaration of all Listeners
  */
@@ -250,6 +275,14 @@ selectSort.addEventListener('change', event => {
   .then(setCurrentProducts)
   .then(() => render(currentProducts, currentPagination));
 });
+
+selectFilterFavorite.addEventListener('change', event => {
+  filterFavorite = event.target.value;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => render(currentProducts, currentPagination));
+});
+
 
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
