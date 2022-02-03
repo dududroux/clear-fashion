@@ -1,13 +1,17 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./sites/dedicatedbrand');
-const adresseParis = require('./sites/adresseparis')
+const adresseParis = require('./sites/adresseparis');
+const montlimart = require('./sites/montlimard');
+
 //https://adresse.paris/630-toute-la-collection
 //https://www.dedicatedbrand.com/en/men/news
-async function sandbox (eshop = 'https://adresse.paris/630-toute-la-collection') {
+//https://www.montlimart.com/toute-la-collection.html
+
+async function sandbox (eshop = 'https://www.montlimart.com/toute-la-collection.html') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
-    const products = await adresseParis.scrape(eshop);
+    const products = await montlimart.scrape(eshop);
 
     console.log(products);
     console.log('done');
