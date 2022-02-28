@@ -34,8 +34,18 @@ async function sandbox (eshop) {
       case 'dedicated':
         const result = await fetch('https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fall-men');
         const x   = await result.json();
-        products = x.products; 
+        prod = x.products; 
+        products = [];
+        prod.splice(0,3);
+        prod.forEach(function(a){
+          if (a.length == undefined){
+            products.push({'link' : 'https://www.dedicatedbrand.com/en/' + a.canonicalUri, "brand" : "dedicated", 
+            "price" : a.price.priceAsNumber, "name" : a.name, "photo" : a.image[0]});
+
+          }
+        });       
         ad = JSON.stringify(products);
+        //console.log(products);
         fs.writeFile('sites/dedicated.json', ad, (err)=> {if(err){throw err;} console.log("JSON saved : dedicated");})     
         break;
       case 'adresse':
