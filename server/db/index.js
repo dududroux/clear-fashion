@@ -1,7 +1,8 @@
 //NWjm68ZFZlHI0ZW7
+//ouioui
 
 const {MongoClient} = require('mongodb');
-const MONGODB_URI = 'mongodb+srv://dududroux:NWjm68ZFZlHI0ZW7@clearfashion.bxzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const MONGODB_URI = 'mongodb+srv://dududroux:ouioui@clearfashion.bxzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 let client = null;
 var adresseP = require('E:/clear-fashion/server/sites/adresseParis.json');
@@ -34,6 +35,7 @@ async function main(){
     await InsertProduct();
     await Close();
 }
+
 
 
 main(); 
