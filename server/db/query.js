@@ -19,9 +19,22 @@ async function query_brand(brand_name){
     console.log(oui);
 }
 
+async function query_price(max_price){
+    var oui = await db.collection("products").find({price : { $lt : max_price}}).toArray();
+    console.log(oui);
+}
+
+async function query_sort_price(){
+    var oui = await db.collection("products").find().sort({price : -1}).toArray();
+    console.log(oui);
+}
+
+
 async function main(){
     await Connect();
-    await query_brand("Adresse Paris");
+    //await query_brand("Adresse Paris");
+    //await query_price(51);
+    await query_sort_price();
     await Close();
 }
 
