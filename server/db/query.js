@@ -29,6 +29,10 @@ async function query_sort_price(){
     console.log(oui);
 }
 
+async function query_general(query_){
+    var result = await db.collection("products").find().sort(query).toArray();
+    return result;
+}
 
 async function main(){
     await Connect();
