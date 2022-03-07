@@ -8,10 +8,14 @@ async function Connect(){
     db =  await client.db(MONGODB_DB_NAME);
 }
 
+module.exports.Connect = Connect;
+
 async function Close(){
     await client.close();
     console.log("Connection Closed");
 }
+
+module.exports.Close = Close;
 
 async function query_brand(brand_name){
     //var dbo = await db.db(MONGODB_DB_NAME);
@@ -29,17 +33,24 @@ async function query_sort_price(){
     console.log(oui);
 }
 
-async function query_general(query_){
-    var result = await db.collection("products").find().sort(query).toArray();
+module.exports.query_general= (query_)=>{
+    var result = db.collection("products").find(query_).toArray();
     return result;
 }
 
-async function main(){
-    await Connect();
-    //await query_brand("Adresse Paris");
-    //await query_price(51);
-    await query_sort_price();
-    await Close();
+async function FindProducts_byID(id) {
+    var result = await db.collection("products").find({_id : id}).toArray();
+    return result;
 }
 
-main()
+module.exports.FindProducts_byID = FindProducts_byID;
+
+async function FindProducts() {
+    var result = await db.collection("products").find({}).toArray();
+    return result;
+}
+
+module.exports.FindProducts = FindProducts;
+
+Connect();
+
