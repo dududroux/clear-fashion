@@ -12,6 +12,8 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
+      console.log($(element)
+      .find('.productList-link'));
       const link = `https://www.dedicatedbrand.com${$(element)
         .find('.productList-link')
         .attr('href')}`;

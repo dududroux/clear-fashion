@@ -11,7 +11,7 @@ const parse = data => {
   const $ = cheerio.load(data);
   return $('li[class^="ajax"] .product-container')
     .map((i, element) => {
-        //console.log(element);
+        
         const link = $(element).find('.product-name-container.versionpc .product-name').attr('href');
         return {
             link,
