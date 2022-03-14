@@ -36,9 +36,15 @@ app.get('/products', async (req, response) => {
   response.send(result);
 });
 
+app.get('/', (request, response) => {
+  response.send({'ack': true, 'test' : true});
+});
+
+
 app.get('/products/:_id', async (req, response) => {
   var result = await query.FindProducts_byID(req.params._id);
   //await query.Close();
   response.send(result);
 });
+
 
