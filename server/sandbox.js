@@ -4,6 +4,7 @@ const adresseParis = require('./sites/adresseparis');
 const montlimart = require('./sites/montlimard');
 const fetch = require("node-fetch");
 const fs = require('fs');
+const {'v5': uuidv5} = require('uuid');
 const { json } = require('express');
 
 //https://adresse.paris/630-toute-la-collection
@@ -40,7 +41,7 @@ async function sandbox (eshop) {
         prod.forEach(function(a){
           if (a.length == undefined){
             products.push({'link' : 'https://www.dedicatedbrand.com/en/' + a.canonicalUri, "brand" : "dedicated", 
-            "price" : a.price.priceAsNumber, "name" : a.name, "photo" : a.image[0]});
+            "price" : a.price.priceAsNumber, "name" : a.name, "photo" : a.image[0], '_id': uuidv5(a.canonicalUri, uuidv5.URL)});
 
           }
         });       
