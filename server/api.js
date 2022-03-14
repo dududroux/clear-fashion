@@ -22,6 +22,14 @@ app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
 
+app.get('/products/search', async (req, response) => {
+  var brand = req.query.brand;
+  var limit = parseInt(req.query.limit);
+  var price = parseInt(req.query.price);
+  var result = await query.Search(brand, price, limit);
+  response.send(result);
+});
+
 app.get('/products', async (req, response) => {
   var result = await query.FindProducts();
   //await query.Close();
@@ -34,7 +42,3 @@ app.get('/products/:_id', async (req, response) => {
   response.send(result);
 });
 
-
-app.get('/products/search', async (req, response) => {
-  console.log(req.query);
-});

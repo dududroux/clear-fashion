@@ -53,17 +53,20 @@ async function FindProducts() {
 module.exports.FindProducts = FindProducts;
 
 async function Search(brand, price, limit){
-    var query = []
+    var query = [];
+    var match = {};
     if (brand != undefined){
-        query.push({$match : {brand : brand}});
+        match.brand = brand;
     }
-    if (price != undefined){
-        query.push({$lte : ["$price", price]});
+    if (!isNaN(price)){
+        match.price = {$lte :  price};
     }
-    if (price != undefined){
+    query.push({$match : match})
+    if (!isNaN(limit)){
         query.push({$limit : limit});
     }
-    var result = await db.collection("products").aggregates(query)
+    console.log(query)
+    var result = await db.collection("products").aggregate(query).toArray();
     return result;
 }
 
