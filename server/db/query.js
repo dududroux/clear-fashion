@@ -52,5 +52,22 @@ async function FindProducts() {
 
 module.exports.FindProducts = FindProducts;
 
+async function Search(brand, price, limit){
+    var query = []
+    if (brand != undefined){
+        query.push({$match : {brand : brand}});
+    }
+    if (price != undefined){
+        query.push({$lte : ["$price", price]});
+    }
+    if (price != undefined){
+        query.push({$limit : limit});
+    }
+    var result = await db.collection("products").aggregates(query)
+    return result;
+}
+
+module.exports.Search = Search;
+
 Connect();
 
