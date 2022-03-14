@@ -3,7 +3,6 @@ const express = require('express');
 const helmet = require('helmet');
 const query = require("./db/query")
 const PORT = 8092;
-var MongoClient = require('mongodb').MongoClient;
 const app = express();
 
 module.exports = app;
@@ -31,6 +30,7 @@ app.get('/products/search', async (req, response) => {
 });
 
 app.get('/products', async (req, response) => {
+  await query.Connect();
   var result = await query.FindProducts();
   //await query.Close();
   response.send(result);
