@@ -87,7 +87,7 @@ const fetchProducts = async (page = 1, size = 12) => {
       body.data.result = body.data.result.filter(a => isNew(a) == "True");
     }
     if (filterFavorite == "yes"){
-      body.data.result = body.data.result.filter(a => setFavorite.has(a.uuid) == true);
+      body.data.result = body.data.result.filter(a => setFavorite.has(a._id) == true);
     }
     if (body.success !== true) {
       console.error(body);
@@ -137,11 +137,11 @@ const renderProducts = products => {
   const template = products
     .map(product => {
       return `
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
         <span>${product.brand}</span>
         <a target="_blank" href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
-        <input type="checkbox" id=${product.uuid} value ="Favorite">
+        <input type="checkbox" id=${product._id} value ="Favorite">
       </div>
     `;
     })
