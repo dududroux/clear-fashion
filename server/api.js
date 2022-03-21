@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const query = require("./db/query")
 const PORT = 8092;
 const app = express();
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
 module.exports = app;
 
@@ -29,11 +30,32 @@ app.get('/products/search', async (req, response) => {
   response.send(result);
 });
 
-app.get('/products', async (req, response) => {
+//app.get('/products', async (req, response) => {
+//  await query.Connect();
+//  var result = await query.FindProducts();
+//  //await query.Close();
+//  response.send(result);
+//});
+
+app.get('/products', async(request, response) => {
   await query.Connect();
-  var result = await query.FindProducts();
-  //await query.Close();
-  response.send(result);
+
+  const filters = request.query;
+  const count = await db.EstimatedDocumentCount();
+  const { limit, offset } = calculateLimitAndOffset(parseInt(filters.page), parseInt(filters.size))
+  const products = await query.FindProducts(limit, offset);
+  const meta = paginate(parseInt(filters.page), count, products, parseInt(filters.size))
+
+  response.send(
+    {
+      "success" : true, 
+      "data" : {
+        "result" : products, 
+        "meta" : meta
+      }
+    }
+  );
+  
 });
 
 app.get('/', (request, response) => {

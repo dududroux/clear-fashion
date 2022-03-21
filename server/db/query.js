@@ -72,5 +72,5 @@ async function Search(brand, price, limit){
 
 module.exports.Search = Search;
 
-Connect();
+//Connect();
 
