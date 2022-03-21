@@ -94,8 +94,8 @@ console.log(sort_marketplace_date);
 var filter_marketplace_50100 = marketplace.filter(a => a.price>=50 && a.price<100);
 console.log(filter_marketplace_50100);
 
-// 🎯 TODO: Average price
-// 1. Determine the average price of the marketplace
+// 🎯 TODO: Average Basket
+// 1. Determine the average basket of the marketplace
 // 2. Log the average
 const average = marketplace.reduce((total, next) => total + next.price, 0)/ marketplace.length;
 console.log(average);
@@ -169,7 +169,7 @@ console.log(sortbrand_date);
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
-var p90 = new Object();
+var p90 = new object();
 
 for (const [key, value] of Object.entries(sortbrand)){
 	let pos = Math.round(value.length * 0.1);
@@ -337,38 +337,3 @@ console.log(jacket);
 localStorage.setItem('fav_brand', JSON.stringify(MY_FAVORITE_BRANDS));
 // 2. log the localStorage
 console.log(localStorage);
-
-
-const izigang = [
-  {"weight" : 123, "height" : 56, "pos" : 'G'},
-  {"weight" : 139, "height" : 60, "pos" : 'F'},
-  {"weight" : 160, "height" : 62, "pos" : 'F-C'},
-  {"weight" : 143, "height" : 65, "pos" : 'C'},
-  {"weight" : 130, "height" : 53, "pos" : 'G'},
-  {"weight" : 120, "height" : 55, "pos" : 'G'},
-  {"weight" : 170, "height" : 63, "pos" : 'C'},
-  {"weight" : 140, "height" : 60, "pos" : 'F'},
-  {"weight" : 120, "height" : 56, "pos" : 'G'}
-];
-
-function avgHorW(posi, typ){
-  var x = 'O'
-  switch(typ){
-      case 'W':
-          x = 'weight'
-          break;
-      case 'H':
-          x = 'height'
-          break;
-  };
-  let pos_info = [];
-  izigang.forEach(function(a){
-      if (a.pos.includes(posi)){
-        pos_info.push(a[x]);
-      };
-  })
-  console.log(pos_info.length);
-  var average = pos_info.reduce((a,b) => a+b, 0)/pos_info.length;
-  return Math.round(average*10)/10;
-};
-console.log(avgHorW('F', 'H'));
