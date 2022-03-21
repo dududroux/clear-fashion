@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 const MONGODB_URI = 'mongodb+srv://dududroux:ouioui@clearfashion.bxzdy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
 async function Connect(){
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
@@ -45,8 +46,8 @@ async function FindProducts_byID(id) {
 
 module.exports.FindProducts_byID = FindProducts_byID;
 
-async function FindProducts() {
-    var result = await db.collection("products").find({}).toArray();
+async function FindProducts(limit = 0, offset = 0) {
+    var result = await db.collection("products").find({}).skip(offset).limit(limit).toArray();
     return result;
 }
 
@@ -69,6 +70,12 @@ async function Search(brand, price, limit){
     var result = await db.collection("products").aggregate(query).toArray();
     return result;
 }
+
+async function EstimatedDocumentCount(){
+    return await db.collection("products").estimatedDocumentCount();
+}
+
+module.exports.EstimatedDocumentCount = EstimatedDocumentCount;
 
 module.exports.Search = Search;
 

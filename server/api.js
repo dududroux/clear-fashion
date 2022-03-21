@@ -41,7 +41,7 @@ app.get('/products', async(request, response) => {
   await query.Connect();
 
   const filters = request.query;
-  const count = await db.EstimatedDocumentCount();
+  const count = await query.EstimatedDocumentCount();
   const { limit, offset } = calculateLimitAndOffset(parseInt(filters.page), parseInt(filters.size))
   const products = await query.FindProducts(limit, offset);
   const meta = paginate(parseInt(filters.page), count, products, parseInt(filters.size))
